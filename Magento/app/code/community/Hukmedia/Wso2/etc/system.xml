@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <hukmedia_wso2 translate="label" module="hukmedia_wso2">
+            <label>WSO2 Identity Server</label>
+            <sort_order>100</sort_order>
+        </hukmedia_wso2>
+    </tabs>
+    <sections>
+        <hukmedia_wso2_saml translate="label" module="hukmedia_wso2">
+            <label>SAML Settings</label>
+            <tab>hukmedia_wso2</tab>
+            <sort_order>200</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <sp translate="label" module="hukmedia_wso2">
+                    <label>Service Provider Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>999</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <nameidformat translate="label">
+                            <label>Name ID Format</label>
+                            <comment></comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>Hukmedia_Wso2_Model_Adminhtml_System_Config_Source_Nameidformat</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </nameidformat>
+                        <privatekey translate="label">
+                            <label>Private Key</label>
+                            <comment><![CDATA[Service Provider Private Key. This is the default WSO2 Key. Please change in production environment.]]></comment>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </privatekey>
+                        <x509 translate="label">
+                            <label>X509 Certificate</label>
+                            <comment><![CDATA[Service Provider Certificate. This is the default WSO2 Certificate. Please change in production environment.]]></comment>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </x509>
+                    </fields>
+                </sp>
+                <idp translate="label" module="hukmedia_wso2">
+                    <label>Identity Provider Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <entityid translate="label">
+                            <label>Entity ID</label>
+                            <comment></comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </entityid>
+                        <sso_url translate="label">
+                            <label>Single Sign On URL</label>
+                            <comment></comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sso_url>
+                        <slo_url translate="label">
+                            <label>Single Logout URL</label>
+                            <comment></comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </slo_url>
+                        <x509 translate="label">
+                            <label>x509 certificate</label>
+                            <comment><![CDATA[WSO2 Identity Server Certificate. This is the default WSO2 Certificate. Please change in production environment.]]></comment>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </x509>
+                    </fields>
+                </idp>
+            </groups>
+        </hukmedia_wso2_saml>
+    </sections>
+</config>

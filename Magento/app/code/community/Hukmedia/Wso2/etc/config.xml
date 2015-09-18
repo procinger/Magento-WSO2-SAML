@@ -1,0 +1,177 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Hukmedia_Wso2>
+            <version>0.9.1</version>
+        </Hukmedia_Wso2>
+    </modules>
+    <global>
+        <models>
+            <hukmedia_wso2>
+                <class>Hukmedia_Wso2_Model</class>
+                <resourceModel>hukmedia_wso2_resource</resourceModel>
+            </hukmedia_wso2>
+            <hukmedia_wso2_resource>
+                <class>Hukmedia_Wso2_Model_Resource</class>
+                <entities>
+                    <sessionindex>
+                        <table>sessionindex</table>
+                    </sessionindex>
+                </entities>
+            </hukmedia_wso2_resource>
+        </models>
+        <resources>
+            <hukmedia_wso2_setup>
+                <setup>
+                    <module>Hukmedia_Wso2</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </hukmedia_wso2_setup>
+            <hukmedia_wso2_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </hukmedia_wso2_read>
+            <hukmedia_wso2_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </hukmedia_wso2_write>
+        </resources>
+        <blocks>
+            <hukmedia_wso2>
+                <class>Hukmedia_Wso2_Block</class>
+            </hukmedia_wso2>
+        </blocks>
+        <helpers>
+            <hukmedia_wso2>
+                <class>Hukmedia_Wso2_Helper</class>
+            </hukmedia_wso2>
+        </helpers>
+    </global>
+    <frontend>
+        <routers>
+            <hukmedia_wso2>
+                <use>standard</use>
+                <args>
+                    <module>Hukmedia_Wso2</module>
+                    <frontName>wso2</frontName>
+                </args>
+            </hukmedia_wso2>
+
+            <customer>
+                <args>
+                    <modules>
+                        <hukmedia_wso2 before="Mage_Customer">Hukmedia_Wso2</hukmedia_wso2>
+                    </modules>
+                </args>
+            </customer>
+
+        </routers>
+        <events>
+            <core_block_abstract_to_html_after>
+                <!--observers>
+                    <loading_login_form>
+                        <class>Hukmedia_Wso2/observer</class>
+                        <method>useNativeMagentoLoginForm</method>
+                    </loading_login_form>
+                </observers-->
+            </core_block_abstract_to_html_after>
+        </events>
+    </frontend>
+    <adminhtml>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <hukmedia_wso2_general>
+                                            <title>WSO2 Identity Server general settings</title>
+                                        </hukmedia_wso2_general>
+                                        <hukmedia_wso2_saml>
+                                            <title>WSO2 Identity Server SAML settings</title>
+                                        </hukmedia_wso2_saml>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+    <default>
+        <hukmedia_wso2_general>
+            <scim>
+                <username>admin</username>
+                <password>admin</password>
+                <user_endpoint>https://localhost:9443/wso2/scim/Users</user_endpoint>
+                <group_endpoint>https://localhost:9443/wso2/scim/Groups</group_endpoint>
+            </scim>
+        </hukmedia_wso2_general>
+
+        <hukmedia_wso2_saml>
+            <magento>
+                <loginForm>Yes</loginForm>
+            </magento>
+            <sp>
+                <nameidformat>urn:oasis:names:tc:SAML:1.1:nameid-format:entity</nameidformat>
+                <privatekey>-----BEGIN PRIVATE KEY-----
+MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAJSn+hXW9Zzz9ORB
+KIC9Oi6wzM4zhqwHaKW2vZAqjOeLlpUW7zXwyk4tkivwsydPNaWUm+9oDlEAB2ls
+QJv7jwWNsF7SGx5R03kenC+cf8Nbxlxwa+Tncjo6uruEsK/Vke244KiSCHP8BOuH
+I+r5CS0x9edFLgesoYlPPFoJxTs5AgMBAAECgYBL/6iiO7hr2mjrvMgZMSSqtCaw
+kLUcA9mjRs6ZArfwtHNymzwGZqj22ONu5WqiASPbGCO0fI09KfegFQDe/fe6wnpi
+rBWtawLoXCZmGrwC+x/3iqbiGJMd7UB3FaZkZOzV5Jhzomc8inSJWMcR+ywiUY37
+stfVDqR1sJ/jzZ1OdQJBAO8vCa2OVQBJbzjMvk8Sc0KiuVwnyqMYqVty6vYuufe9
+ILJfhwhYzE82wIa9LYg7UK2bPvKyyehuFfqI5oU5lU8CQQCfG5LA3gp3D1mS7xxz
+tqJ+cm4SPO4R6YzVybAZKqKUvTFSKNV57Kp/LL7WjtUUNr+dY+aYRlKo81Hq61y8
+tBT3AkAjJyak+2ZCxIg0MONHe8603HWhtbdygQ1jA2DFDdkHMCS+EowmDeb5PXLO
+Wr92ZkFVQpvdz6kdIBDa4YP/0JbBAkBVHLjqd1z9x7ZRBZwgwkg2gBwloXZxGpB+
+JMARFl+WVYa2vqVD7bhfA56qxAl0IL1sAm7ucl/xhQgDNRiM0YCNAkEAqySTBx2H
+O9VyzuWWbf7BYTNsxfO80GaRkZGENfqO1QgnhT1FMeK+ox7Kbi+nSaCBoPjNzyrM
+bU08M6nSnkDEGA==
+-----END PRIVATE KEY-----
+                </privatekey>
+                <x509>-----BEGIN CERTIFICATE-----
+MIICNTCCAZ6gAwIBAgIES343gjANBgkqhkiG9w0BAQUFADBVMQswCQYDVQQGEwJV
+UzELMAkGA1UECAwCQ0ExFjAUBgNVBAcMDU1vdW50YWluIFZpZXcxDTALBgNVBAoM
+BFdTTzIxEjAQBgNVBAMMCWxvY2FsaG9zdDAeFw0xMDAyMTkwNzAyMjZaFw0zNTAy
+MTMwNzAyMjZaMFUxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEWMBQGA1UEBwwN
+TW91bnRhaW4gVmlldzENMAsGA1UECgwEV1NPMjESMBAGA1UEAwwJbG9jYWxob3N0
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCUp/oV1vWc8/TkQSiAvTousMzO
+M4asB2iltr2QKozni5aVFu818MpOLZIr8LMnTzWllJvvaA5RAAdpbECb+48FjbBe
+0hseUdN5HpwvnH/DW8ZccGvk53I6Orq7hLCv1ZHtuOCokghz/ATrhyPq+QktMfXn
+RS4HrKGJTzxaCcU7OQIDAQABoxIwEDAOBgNVHQ8BAf8EBAMCBPAwDQYJKoZIhvcN
+AQEFBQADgYEAW5wPR7cr1LAdq+IrR44iQlRG5ITCZXY9hI0PygLP2rHANh+PYfTm
+xbuOnykNGyhM6FjFLbW2uZHQTY1jMrPprjOrmyK5sjJRO4d1DeGHT/YnIjs9JogR
+Kv4XHECwLtIVdAbIdWHEtVZJyMSktcyysFcvuhPQK8Qc/E/Wq8uHSCo=
+-----END CERTIFICATE-----
+                </x509>
+            </sp>
+            <idp>
+                <entityid>Magento-Login</entityid>
+                <sso_url>https://localhost:9443/samlsso</sso_url>
+                <slo_url>https://localhost:9443/samlsso</slo_url>
+                <x509>-----BEGIN CERTIFICATE-----
+MIICNTCCAZ6gAwIBAgIES343gjANBgkqhkiG9w0BAQUFADBVMQswCQYDVQQGEwJVUzELMAkGA1UE
+CAwCQ0ExFjAUBgNVBAcMDU1vdW50YWluIFZpZXcxDTALBgNVBAoMBFdTTzIxEjAQBgNVBAMMCWxv
+Y2FsaG9zdDAeFw0xMDAyMTkwNzAyMjZaFw0zNTAyMTMwNzAyMjZaMFUxCzAJBgNVBAYTAlVTMQsw
+CQYDVQQIDAJDQTEWMBQGA1UEBwwNTW91bnRhaW4gVmlldzENMAsGA1UECgwEV1NPMjESMBAGA1UE
+AwwJbG9jYWxob3N0MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCUp/oV1vWc8/TkQSiAvTou
+sMzOM4asB2iltr2QKozni5aVFu818MpOLZIr8LMnTzWllJvvaA5RAAdpbECb+48FjbBe0hseUdN5
+HpwvnH/DW8ZccGvk53I6Orq7hLCv1ZHtuOCokghz/ATrhyPq+QktMfXnRS4HrKGJTzxaCcU7OQID
+AQABoxIwEDAOBgNVHQ8BAf8EBAMCBPAwDQYJKoZIhvcNAQEFBQADgYEAW5wPR7cr1LAdq+IrR44i
+QlRG5ITCZXY9hI0PygLP2rHANh+PYfTmxbuOnykNGyhM6FjFLbW2uZHQTY1jMrPprjOrmyK5sjJR
+O4d1DeGHT/YnIjs9JogRKv4XHECwLtIVdAbIdWHEtVZJyMSktcyysFcvuhPQK8Qc/E/Wq8uHSCo=
+-----END CERTIFICATE-----
+                </x509>
+            </idp>
+        </hukmedia_wso2_saml>
+    </default>
+</config>

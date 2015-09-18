@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Hukmedia_Wso2>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Hukmedia_Wso2>
+    </modules>
+</config>
