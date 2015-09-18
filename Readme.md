@@ -12,6 +12,6 @@ Magento SAML SSO/SLO Module tested with
 - [WSO2 Email Authentication must be enabled](https://docs.wso2.com/display/IS500/Email+Authentication).
 
 ## WSO2 Identity Server Service Provider Settings
-![Service Provider General Settings](WSO2_SP_Settings_General.png)
+![Service Provider General Settings](https://raw.githubusercontent.com/hukmedia/Magento-WSO2-SAML/master/doc/WSO2_SP_Settings_General.png)
 
-![Service Provider SAML Settings](WSO2_SP_Settings_SAML.png)
+![Service Provider SAML Settings](https://raw.githubusercontent.com/hukmedia/Magento-WSO2-SAML/master/doc/WSO2_SP_Settings_SAML.png)
