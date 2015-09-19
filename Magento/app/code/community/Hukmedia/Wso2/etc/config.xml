@@ -70,16 +70,6 @@
             </customer>
 
         </routers>
-        <events>
-            <core_block_abstract_to_html_after>
-                <!--observers>
-                    <loading_login_form>
-                        <class>Hukmedia_Wso2/observer</class>
-                        <method>useNativeMagentoLoginForm</method>
-                    </loading_login_form>
-                </observers-->
-            </core_block_abstract_to_html_after>
-        </events>
     </frontend>
     <adminhtml>
         <acl>
@@ -106,19 +96,7 @@
         </acl>
     </adminhtml>
     <default>
-        <hukmedia_wso2_general>
-            <scim>
-                <username>admin</username>
-                <password>admin</password>
-                <user_endpoint>https://localhost:9443/wso2/scim/Users</user_endpoint>
-                <group_endpoint>https://localhost:9443/wso2/scim/Groups</group_endpoint>
-            </scim>
-        </hukmedia_wso2_general>
-
         <hukmedia_wso2_saml>
-            <magento>
-                <loginForm>Yes</loginForm>
-            </magento>
             <sp>
                 <nameidformat>urn:oasis:names:tc:SAML:1.1:nameid-format:entity</nameidformat>
                 <privatekey>-----BEGIN PRIVATE KEY-----
