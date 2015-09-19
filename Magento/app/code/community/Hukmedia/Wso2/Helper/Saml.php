@@ -26,7 +26,7 @@ class Hukmedia_Wso2_Helper_Saml extends Mage_Core_Helper_Abstract {
 
         if($username && $password) {
             $secToken = base64_encode("$username:$password");
-            $options[CURLOPT_SSL_VERIFYPEER] = $secToken;
+            $options[CURLOPT_USERPWD] = $secToken;
             $options[CURLOPT_POSTFIELDS] = "sectoken=" . urlencode($secToken) . "&SAMLRequest=" . urlencode($samlRequest);
         } else {
             $options[CURLOPT_POSTFIELDS] = "SAMLRequest=" . urlencode($samlRequest);
