@@ -109,7 +109,7 @@ class Hukmedia_Wso2_Helper_Config extends Mage_Core_Helper_Abstract {
      * @return string
      */
     public function getSamlX509Cert() {
-        return Mage::getStoreConfig('hukmedia_wso2_saml/idp/x509cert', Mage::app()->getStore());
+        return Mage::getStoreConfig('hukmedia_wso2_saml/idp/x509', Mage::app()->getStore());
     }
 
     /**
@@ -131,34 +131,4 @@ class Hukmedia_Wso2_Helper_Config extends Mage_Core_Helper_Abstract {
             )
         );
     }
-
-    /*
-    public function signMetadata() {
-        return (bool) Mage::getStoreConfig('hukmedia_wso2/saml2_group_security/wso2_security_sign_metadata', Mage::app()->getStore());
-    }
-
-    public function nameIdEncrypted() {
-        return (bool) Mage::getStoreConfig('hukmedia_wso2/saml2_group_security/wso2_security_nameid_encrypted', Mage::app()->getStore());
-    }
-
-    public function authnRequestSigned() {
-        return (bool) Mage::getStoreConfig('hukmedia_wso2/saml2_group_security/wso2_security_authnrequest_signed', Mage::app()->getStore());
-    }
-
-    public function logoutRequestSigned() {
-        return (bool) Mage::getStoreConfig('hukmedia_wso2/saml2_group_security/wso2_security_logoutrequest_signed', Mage::app()->getStore());
-    }
-
-    public function logoutResponseSigned() {
-        return (bool) Mage::getStoreConfig('hukmedia_wso2/saml2_group_security/wso2_security_logoutresponse_signed', Mage::app()->getStore());
-    }
-
-    public function wantAssertionSigned() {
-        return (bool) Mage::getStoreConfig('hukmedia_wso2/saml2_group_security/wso2_security_assertion_signed', Mage::app()->getStore());
-    }
-
-    public function wantAssertionEncrypted() {
-        return (bool) Mage::getStoreConfig('hukmedia_wso2/saml2_group_security/wso2_security_assertion_encrypted', Mage::app()->getStore());
-    }*/
-
 }
