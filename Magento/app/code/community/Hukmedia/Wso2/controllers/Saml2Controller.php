@@ -58,7 +58,7 @@ class Hukmedia_Wso2_Saml2Controller extends Mage_Core_Controller_Front_Action {
                 ->setFirstname($wso2ClaimAttributes['firstname'][0])
                 ->setLastname($wso2ClaimAttributes['lastname'][0])
                 ->setEmail($this->getOneLogin()->getNameId())
-                ->setPassword(md5(time()))
+                ->setPassword(md5(time() . uniqid()))
                 ->save();
             $customer->loadByEmail($this->getOneLogin()->getNameId());
         }
