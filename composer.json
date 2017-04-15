@@ -2,6 +2,16 @@
     "name": "procinger/magento-wso2-saml",
     "description": "Basic Magento login/logout WSO2 Identity Server SAML module",
     "type": "magento-module",
+    "keywords": ["magento", "single sign on", "wso"],
+    "homepage": "https://github.com/procinger/Magento-WSO2-SAMLr",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adam Hukalowicz",
+            "email": "procing3r@gmail.com",
+            "homepage": "http://www.hukmedia.de/"
+        }
+    ],
     "require": {
         "onelogin/php-saml": "*"
     }
