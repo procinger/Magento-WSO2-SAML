@@ -1,6 +1,6 @@
 # WSO2 5.0 SP1 SAML Magento Login / Logout Module
 
-Simple Magento WSO2 Identity Server SAML login/logout module. Based on a modfied version of the [OneLogin library](https://github.com/onelogin/php-saml).
+Simple Magento WSO2 Identity Server SAML login/logout module. Based on the [OneLogin library](https://github.com/onelogin/php-saml).
 Account changes are **not** written back to WSO2 Identity Server!
 
 Magento SAML SSO/SLO Module tested with
