@@ -41,6 +41,7 @@ class Hukmedia_Wso2_Saml2Controller extends Mage_Core_Controller_Front_Action {
         $this->getOneLogin()->processResponse();
         /* Something went wrong, check the WSO2 log. Redirecting back to login form */
         if(!$this->getOneLogin()->isAuthenticated()) {
+            Mage::helper('hukmedia_wso2')->log(print_r($this->getOneLogin()->getErrors(), true));
             $this->_redirect('customer/account/login/', array('forceWsoLogin' => true));
             return;
         }
@@ -58,6 +59,9 @@ class Hukmedia_Wso2_Saml2Controller extends Mage_Core_Controller_Front_Action {
                 ->setEmail($this->getOneLogin()->getNameId())
                 ->setPassword(md5(time() . uniqid()))
                 ->save();
+
+            Mage::helper('hukmedia_wso2')->log('created new user: ' . $this->getOneLogin()->getNameId());
+
             $customer->loadByEmail($this->getOneLogin()->getNameId());
         }
 
@@ -65,6 +69,8 @@ class Hukmedia_Wso2_Saml2Controller extends Mage_Core_Controller_Front_Action {
         $session->loginById($customer->getId());
         $session->setCustomerAsLoggedIn($customer);
         $session->setWsoSessionIndex($this->getOneLogin()->getSessionIndex());
+
+        Mage::helper('hukmedia_wso2')->log('sign in user: ' . $this->getOneLogin()->getNameId());
 
         /* Save WSO2 session for remote SLO */
         $sessionIndexModel = Mage::getModel('hukmedia_wso2/sessionindex');
