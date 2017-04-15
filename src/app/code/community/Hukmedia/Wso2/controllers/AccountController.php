@@ -3,20 +3,6 @@
 require_once 'Mage/Customer/controllers/AccountController.php';
 
 class Hukmedia_Wso2_AccountController extends Mage_Customer_AccountController {
-
-    protected $_oneLogin = null;
-
-    public function preDispatch() {
-        parent::preDispatch();
-
-        require_once(dirname(dirname(__FILE__)) . '/_onelogin_lib_loader.php');
-        $this->_oneLogin = new OneLogin_Saml2_Auth(Mage::helper('hukmedia_wso2/config')->getWso2SamlConfig());
-    }
-
-    public function getOneLogin() {
-        return $this->_oneLogin;
-    }
-
     /**
      * Overwrite Magento loginAction method,
      * to check if a customer is already logged in
@@ -53,7 +39,8 @@ class Hukmedia_Wso2_AccountController extends Mage_Customer_AccountController {
             $login = $this->getRequest()->getPost('login');
             if (!empty($login['username']) && !empty($login['password'])) {
                 $samlHelper = Mage::helper('hukmedia_wso2/saml');
-                $samlHelper->sendAuthnRequest($login['username'], $login['password'], false, false);
+                $samlHelper->sendAuthnRequest($login['username'], $login['password'], true, false, Mage::helper('core/http')->getHttpReferer());
+                return;
             } else {
                 $session->addError($this->__('Login and password are required.'));
             }
@@ -75,7 +62,8 @@ class Hukmedia_Wso2_AccountController extends Mage_Customer_AccountController {
         $this->_getSession()->logout();
 
         /* logout from wso2 */
-        $this->getOneLogin()->logout(Mage::getBaseUrl() . '/customer/account/logoutSuccess/' , array(), $customer->getEmail(), $session->getWsoSessionIndex());
+        $oneLogin = new OneLogin_Saml2_Auth(Mage::helper('hukmedia_wso2/config')->getWso2SamlConfig());
+        $oneLogin->logout(Mage::getBaseUrl() . '/customer/account/logoutSuccess/' , array(), $customer->getEmail(), $session->getWsoSessionIndex());
     }
 
 }

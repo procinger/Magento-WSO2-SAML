@@ -1,7 +1,5 @@
 <?php
 
-require_once(dirname(dirname(__FILE__)) . '/_onelogin_lib_loader.php');
-
 class Hukmedia_Wso2_Helper_Saml extends Mage_Core_Helper_Abstract {
 
     /**
@@ -12,7 +10,7 @@ class Hukmedia_Wso2_Helper_Saml extends Mage_Core_Helper_Abstract {
      * @param $samlRequest
      * @return array
      */
-    private function getCurlOptions($username = null, $password = null, $samlRequest) {
+    private function getCurlOptions($username = null, $password = null, $samlRequest, $relayState = false) {
         $options = array(
             CURLOPT_HEADER => true,
             CURLOPT_RETURNTRANSFER => true,
@@ -32,6 +30,10 @@ class Hukmedia_Wso2_Helper_Saml extends Mage_Core_Helper_Abstract {
             $options[CURLOPT_POSTFIELDS] = "SAMLRequest=" . urlencode($samlRequest);
         }
 
+        if($relayState){
+            $options[CURLOPT_POSTFIELDS] .= "&RelayState=" . urlencode($relayState);
+        }
+
         return $options;
     }
 
@@ -43,20 +45,22 @@ class Hukmedia_Wso2_Helper_Saml extends Mage_Core_Helper_Abstract {
      * @param bool|false $forceAuthn
      * @param bool|false $isPassive
      */
-    public function sendAuthnRequest($username, $password, $forceAuthn = false, $isPassive = false) {
+    public function sendAuthnRequest($username, $password, $forceAuthn = false, $isPassive = false, $relayState = false) {
         $SamlSettings = new OneLogin_Saml2_Settings(Mage::helper('hukmedia_wso2/config')->getWso2SamlConfig());
         $AuthnRequest = new OneLogin_Saml2_AuthnRequest($SamlSettings, $forceAuthn, $isPassive);
-        $samlRequest = $AuthnRequest->getRequest();
 
-        $curlOptions = $this->getCurlOptions($username, $password, $samlRequest);
+        $samlRequest = $AuthnRequest->getRequest(false);
+        $curlOptions = $this->getCurlOptions($username, $password, $samlRequest, $relayState);
+
         $curlHandle = curl_init();
         curl_setopt_array($curlHandle, $curlOptions);
         curl_exec($curlHandle);
-
         $curlInfo = curl_getinfo($curlHandle);
+        curl_close($curlHandle);
+
         if(!empty($curlInfo['redirect_url'])) {
-            header('Location: ' . $curlInfo['redirect_url']);
-            die();
+            Mage::app()->getResponse()->setRedirect($curlInfo['redirect_url']);
+            return;
         }
     }
 }

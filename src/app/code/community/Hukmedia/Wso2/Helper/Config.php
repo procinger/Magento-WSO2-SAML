@@ -23,15 +23,17 @@ class Hukmedia_Wso2_Helper_Config extends Mage_Core_Helper_Abstract {
     public function getSamlSpConfig() {
         return array(
             'sp' => array(
-                'entityId' => Mage::getUrl() . 'wso2/saml2/metadata',
+                'entityId' => Mage::getBaseUrl() . 'wso2/saml2/metadata',
                 'assertionConsumerService' => array(
-                    'url' => Mage::getUrl() . 'wso2/saml2/acs',
+                    'url' => Mage::getBaseUrl() . 'wso2/saml2/acs',
+                    'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'
                 ),
                 'singleLogoutService' => array(
-                    'url' => Mage::getUrl() . 'wso2/saml2/sls',
+                    'url' => Mage::getBaseUrl() . 'wso2/saml2/sls',
+                    'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'
                 ),
                 'NameIDFormat' => $this->getNameIdFormat(),
-                'privateKey' => $this->vgetSamlSpPrivateKey(),
+                'privateKey' => $this->getSamlSpPrivateKey(),
                 'x509cert' => $this->getSamlSpCertificate(),
             )
         );
@@ -46,7 +48,7 @@ class Hukmedia_Wso2_Helper_Config extends Mage_Core_Helper_Abstract {
         return Mage::getStoreConfig('hukmedia_wso2_saml/sp/nameidformat', Mage::app()->getStore());
     }
 
-    public function vgetSamlSpPrivateKey() {
+    public function getSamlSpPrivateKey() {
         return Mage::getStoreConfig('hukmedia_wso2_saml/sp/privatekey', Mage::app()->getStore());
     }
 
@@ -66,9 +68,11 @@ class Hukmedia_Wso2_Helper_Config extends Mage_Core_Helper_Abstract {
                 'entityId'              => $this->getSamlEntityId(),
                 'singleSignOnService'   => array(
                     'url' => $this->getSamlSsoUrl(),
+                    'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'
                 ),
                 'singleLogoutService'   => array(
                     'url' => $this->getSamlSloUrl(),
+                    'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'
                 ),
                 'x509cert' => $this->getSamlX509Cert(),
             )

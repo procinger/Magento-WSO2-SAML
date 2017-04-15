@@ -4,10 +4,8 @@ class Hukmedia_Wso2_Saml2Controller extends Mage_Core_Controller_Front_Action {
 
     protected $_oneLogin = null;
 
-    public function preDispatch() {
-        parent::preDispatch();
-
-        require_once(dirname(dirname(__FILE__)) . '/_onelogin_lib_loader.php');
+    public function _construct()
+    {
         $this->_oneLogin = new OneLogin_Saml2_Auth(Mage::helper('hukmedia_wso2/config')->getWso2SamlConfig());
     }
 
