@@ -1,3 +1,2 @@
-Magento/app/code/community/Hukmedia/        app/code/community/Hukmedia
-Magento/app/etc/modules/Hukmedia_Wso2.xml   app/etc/modules/Hukmedia_Wso2.xml
-Magento/lib/OneLogin/                       lib/OneLogin
+src/app/code/community/Hukmedia/        app/code/community/Hukmedia
+src/app/etc/modules/Hukmedia_Wso2.xml   app/etc/modules/Hukmedia_Wso2.xml
