@@ -102,25 +102,36 @@ class Hukmedia_Wso2_Saml2Controller extends Mage_Core_Controller_Front_Action {
         $samlRequest = $this->getRequest()->getPost('SAMLRequest');
         $oneLoginSettings = new OneLogin_Saml2_Settings(Mage::helper('hukmedia_wso2/config')->getWso2SamlConfig());
         $logoutRequest = new OneLogin_Saml2_LogoutRequest($oneLoginSettings, $samlRequest);
-        $logoutRequestRaw = $logoutRequest->getRequestRaw();
 
-        $sessionIndex = current($logoutRequest->getSessionIndexes($logoutRequestRaw));
-        $sessionIndexModel = Mage::getModel('hukmedia_wso2/sessionindex');
-        $sessionIndexModel->loadBySessionIndex($sessionIndex);
+        if(!$logoutRequest->isValid()) {
+            Mage::helper('hukmedia_wso2')->log('invalid logout request received: ' . print_r($logoutRequest, true), Zend_Log::ERR);
+            return;
+        }
+        try {
+            $logoutRequestXml = $logoutRequest->getXml();
 
-        /* destroy the session from incomming wso2 logout request */
-        session_destroy();
+            $sessionIndex = current($logoutRequest->getSessionIndexes($logoutRequestXml));
 
-        /* load the magento customer session and destroy */
-        /* this is a ugly solution, how can a session be loaded by id or somtheing else? */
-        /* someting like ...
-        /* $session = Mage::getSingleton('core/session')->loadByAnyId($sessionIndexModel->getMagentoSessionId()) */
-        /* $session->logout()->renew() */
+            $sessionIndexModel = Mage::getModel('hukmedia_wso2/sessionindex');
+            $sessionIndexModel->loadBySessionIndex($sessionIndex);
+            /* destroy the session from incomming wso2 logout request */
+            session_destroy();
 
-        /* i'm not happy with this solution :'-( */
-        session_id($sessionIndexModel->getMagentoSessionId());
-        session_start();
-        session_destroy();
-        $sessionIndexModel->delete();
+            /* load the magento customer session and destroy */
+            /* this is a ugly solution, how can a session be loaded by id or somtheing else? */
+            /* someting like ...
+            /* $session = Mage::getSingleton('core/session')->loadByAnyId($sessionIndexModel->getMagentoSessionId()) */
+            /* $session->logout()->renew() */
+
+            /* i'm not happy with this solution :'-( */
+            session_id($sessionIndexModel->getMagentoSessionId());
+            session_start();
+            session_destroy();
+            $sessionIndexModel->delete();
+
+            Mage::helper('hukmedia_wso2')->log('succesfully signed out ' . $sessionIndexModel->getMagentoUserName() . ' WSO Session Index ' . $sessionIndexModel->getWsoSessionIndex());
+        } catch (Exception $e) {
+            Mage::helper('hukmedia_wso2')->log('failed to sign out ' . $sessionIndexModel->getMagentoUserName() . '. WSO Session Index ' . $sessionIndexModel->getWsoSessionIndex(), Zend_Log::ERR);
+        }
     }
 }
