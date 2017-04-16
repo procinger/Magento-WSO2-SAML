@@ -56,7 +56,13 @@ class Hukmedia_Wso2_Helper_Saml extends Mage_Core_Helper_Abstract {
         curl_setopt_array($curlHandle, $curlOptions);
         curl_exec($curlHandle);
         $curlInfo = curl_getinfo($curlHandle);
+        $curlError = curl_error($curlHandle);
+        $curlErrorNo = curl_errno($curlHandle);
         curl_close($curlHandle);
+
+        if($curlError) {
+            Mage::helper('hukmedia_wso2')->log($curlError . '. Error no: ' . $curlErrorNo, Zend_Log::ERR);
+        }
 
         if(!empty($curlInfo['redirect_url'])) {
             Mage::app()->getResponse()->setRedirect($curlInfo['redirect_url']);

@@ -51,19 +51,25 @@ class Hukmedia_Wso2_AccountController extends Mage_Customer_AccountController {
 
 
     public function logoutAction() {
-        /* delete wso2 <> magento session relation */
         $session = $this->_getSession();
         $customer = $session->getCustomer();
-        $sessionIndexModel = Mage::getModel('hukmedia_wso2/sessionindex');
-        $sessionIndexModel->loadByEmail($customer->getEmail());
-        $sessionIndexModel->delete();
 
-        /* logout from magento */
-        $this->_getSession()->logout();
+        try {
+            /* delete wso2 <> magento session relation */
+            $sessionIndexModel = Mage::getModel('hukmedia_wso2/sessionindex');
+            $sessionIndexModel->loadByEmail($customer->getEmail());
+            $sessionIndexModel->delete();
 
-        /* logout from wso2 */
-        $oneLogin = new OneLogin_Saml2_Auth(Mage::helper('hukmedia_wso2/config')->getWso2SamlConfig());
-        $oneLogin->logout(Mage::getBaseUrl() . '/customer/account/logoutSuccess/' , array(), $customer->getEmail(), $session->getWsoSessionIndex());
+            /* logout from magento */
+            $this->_getSession()->logout();
+            Mage::helper('hukmedia_wso2')->log('sign out user: ' . $customer->getEmail(), Zend_log::INFO);
+
+            /* logout from wso2 */
+            $oneLogin = new OneLogin_Saml2_Auth(Mage::helper('hukmedia_wso2/config')->getWso2SamlConfig());
+            $oneLogin->logout(Mage::getBaseUrl() . '/customer/account/logoutSuccess/', array(), $customer->getEmail(), $session->getWsoSessionIndex());
+        } catch (Exception $e) {
+            Mage::helper('hukmedia_wso2')->log('failed to sign out user: ' . $customer->getEmail() . '. Reason: ' . $e->getMessage(), Zend_Log::ERR);
+        }
     }
 
 }
