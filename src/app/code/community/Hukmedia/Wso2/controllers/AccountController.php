@@ -12,6 +12,7 @@ class Hukmedia_Wso2_AccountController extends Mage_Customer_AccountController {
         if($this->getRequest()->getParam('forceWsoLogin') != true) {
             $samlHelper = Mage::helper('hukmedia_wso2/saml');
             $samlHelper->sendAuthnRequest(null, null, false, true);
+            return;
         }
 
         /* No WSO2 session established, start login procedure */

@@ -14,11 +14,20 @@ class Hukmedia_Wso2_Helper_Saml extends Mage_Core_Helper_Abstract {
 
         $urlParameters = sprintf('%sSAMLRequest=%s&RelayState=%s', $secToken, $samlRequest, $relayState);
         $ssoEndpoint = Mage::helper('hukmedia_wso2/config')->getSamlSsoUrl();
+        $redirectMessage = Mage::helper('hukmedia_wso2/config')->getRedirectMessage();
 
         $payload = <<<PAYLOAD
 <form method="POST" action="$ssoEndpoint?$urlParameters">
-    <input type="submit" value="Process login">
+    <noscript>
+        $redirectMessage
+        <br/>
+        <input type="submit" value="login">
+    </noscript>
 </form>
+<script type='text/javascript'>
+        document.forms[0].submit();
+</script>
+
 PAYLOAD;
         
         return $payload;
@@ -39,6 +48,5 @@ PAYLOAD;
         $samlRequest = $AuthnRequest->getRequest(false);
         $payload = $this->buildHtmlPayload($username, $password, $samlRequest, $relayState);
         echo $payload;
-        return;
     }
 }

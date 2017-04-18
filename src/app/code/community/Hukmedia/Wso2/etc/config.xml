@@ -131,6 +131,7 @@ xbuOnykNGyhM6FjFLbW2uZHQTY1jMrPprjOrmyK5sjJRO4d1DeGHT/YnIjs9JogR
 Kv4XHECwLtIVdAbIdWHEtVZJyMSktcyysFcvuhPQK8Qc/E/Wq8uHSCo=
 -----END CERTIFICATE-----
                 </x509>
+                <redirect_message>You are now redirected to the identity server. If the redirection fails, please click the login button.</redirect_message>
             </sp>
             <idp>
                 <entityid>Magento-Login</entityid>
