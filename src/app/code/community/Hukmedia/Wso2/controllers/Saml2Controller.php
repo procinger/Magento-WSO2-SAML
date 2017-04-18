@@ -36,33 +36,44 @@ class Hukmedia_Wso2_Saml2Controller extends Mage_Core_Controller_Front_Action {
      * Assertion Consumer Service
      */
     public function acsAction() {
-        $websiteId = Mage::app()->getWebsite()->getId();
+        $wsoHelper = Mage::helper('hukmedia_wso2');
         $session = Mage::getSingleton('customer/session');
         $this->getOneLogin()->processResponse();
+
         /* Something went wrong, check the WSO2 log. Redirecting back to login form */
         if(!$this->getOneLogin()->isAuthenticated()) {
-            Mage::helper('hukmedia_wso2')->log(print_r($this->getOneLogin()->getErrors(), true));
+            $wsoHelper->log(print_r($this->getOneLogin()->getErrors(), true));
             $this->_redirect('customer/account/login/', array('forceWsoLogin' => true));
             return;
         }
 
-        $customer = Mage::getModel('customer/customer');
-        $customer->setWebsiteId($websiteId);
-        $customer->loadByEmail($this->getOneLogin()->getNameId());
+        $wso2ClaimAttributes = $this->getOneLogin()->getAttributes();
+        if(!array_key_exists('uid', $wso2ClaimAttributes) || empty (current($wso2ClaimAttributes['uid']))) {
+            $wsoHelper->log('Missing "uid" claim attribute. Check Service Provider config in WSO2 Server.', Zend_Log::ERR);
+            $session->addError($this->__('Login failed. There is a technical issue.'));
+            $this->_redirect('customer/account/login/', array('forceWsoLogin' => true));
+            return;
+        }
+
+        $scimId = current($wso2ClaimAttributes['uid']);
+        $customer = $wsoHelper->getCustomerByScimId($scimId);
 
         /* Check if customer exist, otherwise create a new customer object */
         if (!$customer->getId()) {
-            $wso2ClaimAttributes = $this->getOneLogin()->getAttributes();
             $customer->setStore(Mage::app()->getStore())
-                ->setFirstname($wso2ClaimAttributes['firstname'][0])
-                ->setLastname($wso2ClaimAttributes['lastname'][0])
+                ->setFirstname(current($wso2ClaimAttributes['firstname']))
+                ->setLastname(current($wso2ClaimAttributes['lastname']))
                 ->setEmail($this->getOneLogin()->getNameId())
                 ->setPassword(md5(time() . uniqid()))
+                ->setWsoScimId($scimId)
                 ->save();
 
             Mage::helper('hukmedia_wso2')->log('created new user: ' . $this->getOneLogin()->getNameId());
-
-            $customer->loadByEmail($this->getOneLogin()->getNameId());
+        } else {
+            $customer->setFirstname(current($wso2ClaimAttributes['firstname']))
+                ->setLastname(current($wso2ClaimAttributes['lastname']))
+                ->setEmail($this->getOneLogin()->getNameId())
+                ->save();
         }
 
         /* Magento login */
