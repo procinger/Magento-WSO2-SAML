@@ -2,39 +2,26 @@
 
 class Hukmedia_Wso2_Helper_Saml extends Mage_Core_Helper_Abstract {
 
-    /**
-     * Set cURL options for the WSO2 AuthNRequest
-     *
-     * @param null $username
-     * @param null $password
-     * @param $samlRequest
-     * @return array
-     */
-    private function getCurlOptions($username = null, $password = null, $samlRequest, $relayState = false) {
-        $options = array(
-            CURLOPT_HEADER => true,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_TIMEOUT_MS => 1000,
-            CURLOPT_URL => Mage::helper('hukmedia_wso2/config')->getSamlSsoUrl(),
-            CURLOPT_POST => true,
-            CURLOPT_FOLLOWLOCATION => false,
-        );
-
+    private function buildHtmlPayload($username = null, $password = null, $samlRequest, $relayState = false) {
+        $secToken = '';
         if($username && $password) {
-            $secToken = base64_encode("$username:$password");
-            $options[CURLOPT_USERPWD] = $secToken;
-            $options[CURLOPT_POSTFIELDS] = "sectoken=" . urlencode($secToken) . "&SAMLRequest=" . urlencode($samlRequest);
-        } else {
-            $options[CURLOPT_POSTFIELDS] = "SAMLRequest=" . urlencode($samlRequest);
+            $secToken = urlencode(base64_encode("$username:$password"));
+            $secToken = sprintf('sectoken=%s&', $secToken);
         }
 
-        if($relayState){
-            $options[CURLOPT_POSTFIELDS] .= "&RelayState=" . urlencode($relayState);
-        }
+        $samlRequest = urlencode($samlRequest);
+        $relayState = urlencode($relayState);
 
-        return $options;
+        $urlParameters = sprintf('%sSAMLRequest=%s&RelayState=%s', $secToken, $samlRequest, $relayState);
+        $ssoEndpoint = Mage::helper('hukmedia_wso2/config')->getSamlSsoUrl();
+
+        $payload = <<<PAYLOAD
+<form method="POST" action="$ssoEndpoint?$urlParameters">
+    <input type="submit" value="Process login">
+</form>
+PAYLOAD;
+        
+        return $payload;
     }
 
     /**
@@ -50,23 +37,8 @@ class Hukmedia_Wso2_Helper_Saml extends Mage_Core_Helper_Abstract {
         $AuthnRequest = new OneLogin_Saml2_AuthnRequest($SamlSettings, $forceAuthn, $isPassive);
 
         $samlRequest = $AuthnRequest->getRequest(false);
-        $curlOptions = $this->getCurlOptions($username, $password, $samlRequest, $relayState);
-
-        $curlHandle = curl_init();
-        curl_setopt_array($curlHandle, $curlOptions);
-        curl_exec($curlHandle);
-        $curlInfo = curl_getinfo($curlHandle);
-        $curlError = curl_error($curlHandle);
-        $curlErrorNo = curl_errno($curlHandle);
-        curl_close($curlHandle);
-
-        if($curlError) {
-            Mage::helper('hukmedia_wso2')->log($curlError . '. Error no: ' . $curlErrorNo, Zend_Log::ERR);
-        }
-
-        if(!empty($curlInfo['redirect_url'])) {
-            Mage::app()->getResponse()->setRedirect($curlInfo['redirect_url']);
-            return;
-        }
+        $payload = $this->buildHtmlPayload($username, $password, $samlRequest, $relayState);
+        echo $payload;
+        return;
     }
 }
