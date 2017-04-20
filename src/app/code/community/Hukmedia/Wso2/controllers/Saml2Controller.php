@@ -43,7 +43,7 @@ class Hukmedia_Wso2_Saml2Controller extends Mage_Core_Controller_Front_Action {
         /* Something went wrong, check the WSO2 log. Redirecting back to login form */
         if(!$this->getOneLogin()->isAuthenticated()) {
             $wsoHelper->log(print_r($this->getOneLogin()->getErrors(), true));
-            $this->_redirect('customer/account/login/', array('forceWsoLogin' => true));
+            $this->_redirect('customer/account/login/', array('forceLogin' => true));
             return;
         }
 
@@ -51,7 +51,7 @@ class Hukmedia_Wso2_Saml2Controller extends Mage_Core_Controller_Front_Action {
         if(!array_key_exists('uid', $wso2ClaimAttributes) || empty (current($wso2ClaimAttributes['uid']))) {
             $wsoHelper->log('Missing "uid" claim attribute. Check Service Provider config in WSO2 Server.', Zend_Log::ERR);
             $session->addError($this->__('Login failed. There is a technical issue.'));
-            $this->_redirect('customer/account/login/', array('forceWsoLogin' => true));
+            $this->_redirect('customer/account/login/', array('forceLogin' => true));
             return;
         }
 
@@ -60,13 +60,18 @@ class Hukmedia_Wso2_Saml2Controller extends Mage_Core_Controller_Front_Action {
 
         /* Check if customer exist, otherwise create a new customer object */
         if (!$customer->getId()) {
-            $customer->setStore(Mage::app()->getStore())
-                ->setFirstname(current($wso2ClaimAttributes['firstname']))
-                ->setLastname(current($wso2ClaimAttributes['lastname']))
-                ->setEmail($this->getOneLogin()->getNameId())
-                ->setPassword(md5(time() . uniqid()))
-                ->setWsoScimId($scimId)
-                ->save();
+            try {
+                $customer->setStore(Mage::app()->getStore())
+                    ->setFirstname(current($wso2ClaimAttributes['firstname']))
+                    ->setLastname(current($wso2ClaimAttributes['lastname']))
+                    ->setEmail($this->getOneLogin()->getNameId())
+                    ->setPassword(md5(time() . uniqid()))
+                    ->setWsoScimId($scimId)
+                    ->save();
+            } catch (Exception $e) {
+                $wsoHelper->log($e->getMessage(), Zend_Log::ERR);
+                $this->_redirect('customer/account/login/', array('forceWsoLogin' => true));
+            }
 
             Mage::helper('hukmedia_wso2')->log('created new user: ' . $this->getOneLogin()->getNameId());
         } else {

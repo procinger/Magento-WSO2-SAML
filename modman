@@ -1,2 +1,4 @@
-src/app/code/community/Hukmedia/        app/code/community/Hukmedia
-src/app/etc/modules/Hukmedia_Wso2.xml   app/etc/modules/Hukmedia_Wso2.xml
+src/app/code/community/Hukmedia/                        app/code/community/Hukmedia
+src/app/etc/modules/Hukmedia_Wso2.xml                   app/etc/modules/Hukmedia_Wso2.xml
+src/app/design/frontend/base/default/layout/hukmedia    app/design/frontend/base/default/layout/hukmedia
+src/app/design/frontend/base/default/template/hukmedia  app/design/frontend/base/default/template/hukmedia

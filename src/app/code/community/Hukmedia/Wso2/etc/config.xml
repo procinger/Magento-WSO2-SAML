@@ -60,7 +60,6 @@
                     <frontName>wso2</frontName>
                 </args>
             </hukmedia_wso2>
-
             <customer>
                 <args>
                     <modules>
@@ -68,8 +67,24 @@
                     </modules>
                 </args>
             </customer>
-
         </routers>
+        <layout>
+            <updates>
+                <hukmedia_wso2 module="Hukmedia_Wso2">
+                    <file>hukmedia/wso2/customer.xml</file>
+                </hukmedia_wso2>
+            </updates>
+        </layout>
+        <events>
+            <controller_action_layout_load_before>
+                <observers>
+                    <hukmedia_wso2>
+                        <class>Hukmedia_Wso2_Model_Observer</class>
+                        <method>login</method>
+                    </hukmedia_wso2>
+                </observers>
+            </controller_action_layout_load_before>
+        </events>
     </frontend>
     <adminhtml>
         <acl>
@@ -131,7 +146,6 @@ xbuOnykNGyhM6FjFLbW2uZHQTY1jMrPprjOrmyK5sjJRO4d1DeGHT/YnIjs9JogR
 Kv4XHECwLtIVdAbIdWHEtVZJyMSktcyysFcvuhPQK8Qc/E/Wq8uHSCo=
 -----END CERTIFICATE-----
                 </x509>
-                <redirect_message>You are now redirected to the identity server. If the redirection fails, please click the login button.</redirect_message>
             </sp>
             <idp>
                 <entityid>Magento-Login</entityid>

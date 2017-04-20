@@ -75,9 +75,6 @@ class Hukmedia_Wso2_Helper_Config extends Mage_Core_Helper_Abstract {
         return Mage::getStoreConfig('hukmedia_wso2_saml/sp/x509', Mage::app()->getStore());
     }
 
-    public function getRedirectMessage() {
-        return Mage::getStoreConfig('hukmedia_wso2_saml/sp/redirect_message', Mage::app()->getStore());
-    }
     /**
      * Get WSO2 Identity Server Identity Provider settings
      *
