@@ -3,20 +3,6 @@
 require_once 'Mage/Customer/controllers/AccountController.php';
 
 class Hukmedia_Wso2_AccountController extends Mage_Customer_AccountController {
-    /**
-     * Overwrite Magento loginAction method,
-     * to check if a customer is already logged in
-     */
-    public function loginAction() {
-        /* Something went wrong, force login form */
-        if($this->getRequest()->getParam('forceWsoLogin') != true) {
-            $samlHelper = Mage::helper('hukmedia_wso2/saml');
-            $samlHelper->sendAuthnRequest(null, null, false, true);
-        }
-
-        /* No WSO2 session established, start login procedure */
-        parent::loginAction();
-    }
 
     /**
      * Overwrite Magento loginPostAction to send the
@@ -38,8 +24,9 @@ class Hukmedia_Wso2_AccountController extends Mage_Customer_AccountController {
         if ($this->getRequest()->isPost()) {
             $login = $this->getRequest()->getPost('login');
             if (!empty($login['username']) && !empty($login['password'])) {
-                $samlHelper = Mage::helper('hukmedia_wso2/saml');
-                $samlHelper->sendAuthnRequest($login['username'], $login['password'], true, false, Mage::helper('core/http')->getHttpReferer());
+                $this->loadLayout();
+                $this->getLayout()->getBlock('hukmedia.wso2.customer.login.redirect')->setLogin($login);
+                $this->renderLayout();
                 return;
             } else {
                 $session->addError($this->__('Login and password are required.'));

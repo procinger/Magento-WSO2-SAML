@@ -1,0 +1,12 @@
+<form id="sso-redirect-form" method="POST" action="<?php echo $this->getRedirectForm($this->getLogin()); ?>">
+    <div class="content">
+        <p><?php echo $this->__('You are getting now redirected to our identity management server. If the automatic redirection fails, please click the Redirect button.')?></p>
+    </div>
+        <br/>
+        <div class="button-set">
+            <button type="submit" title="login" class="button"><span>Redirect</span></button>
+        </div>
+</form>
+<script type='text/javascript'>
+    //document.getElementById('sso-redirect-form').submit()
+</script>

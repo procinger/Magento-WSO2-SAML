@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <customer_account_loginpost module="Hukmedia_Wso2">
+        <reference name="content">
+            <block type="hukmedia_wso2/customer" name="hukmedia.wso2.customer.login.redirect" template="hukmedia/wso2/customer/login/redirect.phtml"></block>
+        </reference>
+    </customer_account_loginpost>
+
+    <hukmedia_wso2_login_check module="Hukmedia_Wso2">
+        <remove name="customer_form_login" />
+        <reference name="content">
+            <block type="hukmedia_wso2/customer" name="hukmedia.wso2.customer.login.redirect" template="hukmedia/wso2/customer/login/redirect.phtml"></block>
+        </reference>
+    </hukmedia_wso2_login_check>
+</layout>

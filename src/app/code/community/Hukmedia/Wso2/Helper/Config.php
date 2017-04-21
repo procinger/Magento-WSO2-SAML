@@ -23,7 +23,7 @@ class Hukmedia_Wso2_Helper_Config extends Mage_Core_Helper_Abstract {
     public function getSamlSpConfig() {
         return array(
             'sp' => array(
-                'entityId' => Mage::getBaseUrl() . 'wso2/saml2/metadata',
+                'entityId' => $this->getSamlSpEntityId(),
                 'assertionConsumerService' => array(
                     'url' => Mage::getBaseUrl() . 'wso2/saml2/acs',
                     'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'
@@ -40,6 +40,15 @@ class Hukmedia_Wso2_Helper_Config extends Mage_Core_Helper_Abstract {
     }
 
     /**
+     * Get SPs entity id
+     *
+     * @return string
+     */
+    public function getSamlSpEntityId() {
+        return Mage::getStoreConfig('hukmedia_wso2_saml/sp/entityid', Mage::app()->getStore());
+    }
+
+    /**
      * Get WSO2 Identity Server specified NameIDFormat
      *
      * @return string
@@ -48,12 +57,21 @@ class Hukmedia_Wso2_Helper_Config extends Mage_Core_Helper_Abstract {
         return Mage::getStoreConfig('hukmedia_wso2_saml/sp/nameidformat', Mage::app()->getStore());
     }
 
+    /**
+     * Get SPs private key
+     *
+     * @return string
+     */
     public function getSamlSpPrivateKey() {
         return Mage::getStoreConfig('hukmedia_wso2_saml/sp/privatekey', Mage::app()->getStore());
     }
 
+    /**
+     * Get SPs private certificate
+     *
+     * @return mstring
+     */
     public function getSamlSpCertificate() {
-        //var_dump(Mage::getStoreConfig('hukmedia_wso2_saml/sp/x509', Mage::app()->getStore())); die();
         return Mage::getStoreConfig('hukmedia_wso2_saml/sp/x509', Mage::app()->getStore());
     }
 
@@ -84,7 +102,6 @@ class Hukmedia_Wso2_Helper_Config extends Mage_Core_Helper_Abstract {
      *
      * @return string
      */
-
     public function getSamlEntityId() {
         return Mage::getStoreConfig('hukmedia_wso2_saml/idp/entityid', Mage::app()->getStore());
     }
