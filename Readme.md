@@ -12,3 +12,5 @@ Magento SAML SSO/SLO Module tested with
 ## Requirements
 - WSO2 5.0 with SP1 / WSO2 5.3.0.
 - [WSO2 Email Authentication must be enabled](https://docs.wso2.com/display/IS500/Email+Authentication).
+
+@TODO write Documentation
