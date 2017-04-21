@@ -21,7 +21,7 @@ class Hukmedia_Wso2_Saml2Controller extends Mage_Core_Controller_Front_Action {
         $oneLoginMetadata = $oneLoginSettings->getSPMetadata();
         $oneLoginMetadataErrors = $oneLoginSettings->validateMetadata($oneLoginMetadata);
 
-        if (empty($errors)) {
+        if (empty($oneLoginMetadataErrors)) {
             $this->getResponse()->setHeader('Content-type', 'text/xml');
             $this->getResponse()->setBody($oneLoginMetadata);
         } else {
