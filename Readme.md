@@ -5,7 +5,9 @@ Account changes are **not** written back to WSO2 Identity Server!
 
 Magento SAML SSO/SLO Module tested with
 - Magento 1.9.1 CE
+- Magento 1.9.3.2 CE
 - WSO2 Identity Server 5.0 SP1
+- WSO2 Identity Server 5.3.0
 
 ## Requirements
 - WSO2 5.0 with SP1.
