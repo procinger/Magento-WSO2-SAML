@@ -15,6 +15,25 @@
             <show_in_website>1</show_in_website>
             <show_in_store>1</show_in_store>
             <groups>
+                <claim translate="label" module="hukmedia_wso2">
+                    <label>Claim Mapping</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>5</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <mapping translate="label">
+                            <label>Account Information</label>
+                            <frontend_model>Hukmedia_Wso2_Model_Adminhtml_System_Config_Source_Claim</frontend_model>
+                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </mapping>
+                    </fields>
+                </claim>
                 <sp translate="label" module="hukmedia_wso2">
                     <label>Service Provider Settings</label>
                     <frontend_type>text</frontend_type>
