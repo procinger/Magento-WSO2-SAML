@@ -33,4 +33,18 @@ class Hukmedia_Wso2_Model_Sessionindex extends Mage_Core_Model_Abstract
     public function loadByCustomerId($id = null) {
         return $this->load($id, 'magento_customer_id');
     }
+
+    public function saveSessionData(Mage_Customer_Model_Session $session, Mage_Customer_Model_Customer $customer, $sessionIndex) {
+        $this->loadByCustomerId($customer->getId());
+        if(!$this->getId()) {
+            $this->setMagentoSessionId($session->getEncryptedSessionId());
+            $this->setMagentoUserName($customer->getEmail());
+            $this->setMagentoCustomerId($customer->getId());
+            $this->setWsoSessionIndex($sessionIndex);
+        } else {
+            $this->setMagentoSessionId($session->getEncryptedSessionId());
+            $this->setWsoSessionIndex($sessionIndex);
+        }
+        $this->save();
+    }
 }

@@ -71,18 +71,8 @@ class Hukmedia_Wso2_Saml2Controller extends Mage_Core_Controller_Front_Action {
         Mage::helper('hukmedia_wso2')->log('sign in user: ' . $this->getOneLogin()->getNameId());
 
         /* Save WSO2 session for remote SLO */
-        $sessionIndexModel = Mage::getModel('hukmedia_wso2/sessionindex');
-        $sessionIndexModel->loadByCustomerId($customer->getId());
-        if(!$sessionIndexModel->getId()) {
-            $sessionIndexModel->setMagentoSessionId($session->getEncryptedSessionId());
-            $sessionIndexModel->setMagentoUserName($customer->getEmail());
-            $sessionIndexModel->setMagentoCustomerId($customer->getId());
-            $sessionIndexModel->setWsoSessionIndex($this->getOneLogin()->getSessionIndex());
-        } else {
-            $sessionIndexModel->setMagentoSessionId($session->getEncryptedSessionId());
-            $sessionIndexModel->setWsoSessionIndex($this->getOneLogin()->getSessionIndex());
-        }
-        $sessionIndexModel->save();
+        Mage::getModel('hukmedia_wso2/sessionindex')
+            ->saveSessionData($session, $customer, $this->getOneLogin()->getSessionIndex());
 
         /* Redirect to customer dashboard */
         $this->_redirect('customer/account/');
