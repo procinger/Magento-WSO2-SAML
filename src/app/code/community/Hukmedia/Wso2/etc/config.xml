@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Hukmedia_Wso2>
-            <version>0.3.4</version>
+            <version>0.3.5</version>
         </Hukmedia_Wso2>
     </modules>
     <global>
