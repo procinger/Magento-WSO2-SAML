@@ -8,11 +8,19 @@ class Hukmedia_Wso2_Helper_Config extends Mage_Core_Helper_Abstract {
      * @return array
      */
     public function getWso2SamlConfig() {
+        $attributeConsumingService = $this->getAttributeConsumingService();
+        $samlSpConfig = $this->getSamlSpConfig();
+
+        if($attributeConsumingService) {
+           $samlSpConfig['sp']['attributeConsumingService'] = $attributeConsumingService;
+        }
+
         return array_merge(
-            $this->getSamlSpConfig(),
+            $samlSpConfig,
             $this->getSamlIdpConfig(),
             $this->getSecurityConfig()
         );
+
     }
 
     /**
@@ -37,6 +45,39 @@ class Hukmedia_Wso2_Helper_Config extends Mage_Core_Helper_Abstract {
                 'x509cert' => $this->getSamlSpCertificate(),
             )
         );
+    }
+
+    private function getAttributeConsumingService() {
+        $claimMappingConfig = Mage::helper('hukmedia_wso2/claim')->getClaimMappingConfigCollection();
+
+        if(!$claimMappingConfig) {
+            return false;
+        }
+
+        $requestedAttributes = array();
+        foreach ($claimMappingConfig as $claimMapping) {
+            $requestedAttributes[] = array(
+                'name' => $claimMapping->getName(),
+                'isRequired' => $claimMapping->getIsRequired(),
+                'nameFormat' => $claimMapping->getAttributeNameFormat(),
+                'friendlyName' => $this->getFriendlyName($claimMapping->getLocalAttribute()),
+                'attributeValue' => array()
+            );
+        }
+
+        return array(
+                'serviceName' => 'service name',
+                'serviceDescription' => 'service description',
+                'requestedAttributes' => $requestedAttributes
+            );
+    }
+
+    public function getFriendlyName($attributeCode) {
+        $registerForm = Mage::getSingleton('customer/form');
+        $registerForm->setFormCode('customer_account_create');
+
+        $attribute = $registerForm->getAttribute($attributeCode);
+        return Mage::helper('hukmedia_wso2')->__($attribute->getFrontendLabel());
     }
 
     /**
@@ -150,6 +191,21 @@ class Hukmedia_Wso2_Helper_Config extends Mage_Core_Helper_Abstract {
                 'wantAssertionsSigned' => false,
                 'wantAssertionsEncrypted' => false
             )
+        );
+    }
+
+    /**
+     * urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified
+     * urn:oasis:names:tc:SAML:2.0:attrname-format:uri
+     * urn:oasis:names:tc:SAML:2.0:attrname-format:basic
+     *
+     * @return array
+     */
+    public function getAttributeNameFormat() {
+        return array(
+            array('value' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', 'label' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified'),
+            array('value' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri', 'label' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'),
+            array('value' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', 'label' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic')
         );
     }
 }

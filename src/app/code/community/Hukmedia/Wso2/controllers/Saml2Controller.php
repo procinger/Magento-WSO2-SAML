@@ -56,8 +56,13 @@ class Hukmedia_Wso2_Saml2Controller extends Mage_Core_Controller_Front_Action {
             return;
         }
 
-        $claimMappingConfig = $claimHelper->getClaimMappingConfig();
-        $scimId = current($wso2ClaimAttributes[$claimMappingConfig->getWsoScimId()]);
+        $claimMappingConfigCollection = $claimHelper->getClaimMappingConfigCollection();
+        foreach($claimMappingConfigCollection as $claimMappingConfig) {
+            if($claimMappingConfig->getWsoScimId()) {
+                $scimId = current($wso2ClaimAttributes[$claimMappingConfig->getWsoScimId()]);
+                break;
+            }
+        }
 
         $customer = Mage::getModel('hukmedia_wso2/acs_customer')
             ->setClaimAttributes($wso2ClaimAttributes)

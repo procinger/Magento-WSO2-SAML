@@ -84,11 +84,11 @@ class Hukmedia_Wso2_Model_Acs_Customer {
      * @return Mage_Customer_Model_Customer
      */
     private function _updateCustomer(Mage_Customer_Model_Customer $customer) {
-        $claimMappingConfig = $this->getClaimHelper()->getClaimMappingConfig();
+        $claimMappingConfigCollection = $this->getClaimHelper()->getClaimMappingConfigCollection();
         $claimAttributes = $this->getClaimAttributes();
 
-        foreach($claimMappingConfig->getData() as $localAttribute => $wsoField) {
-            $customer->setData($localAttribute, current($claimAttributes[$wsoField]));
+        foreach($claimMappingConfigCollection as $claimMappingConfig) {
+            $customer->setData($claimMappingConfig->getLocalAttribute(), current($claimAttributes[$claimMappingConfig->getName()]));
         }
 
         $customer->save();
